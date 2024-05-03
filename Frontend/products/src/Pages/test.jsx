@@ -19,11 +19,18 @@ const Able = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    fetch('https://dummyjson.com/products')
-      .then(resp => resp.json())
-      .then(data => setRows(data.products))
-      .catch(e => console.error("Failed to fetch products:", e.message));
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('https://dummyjson.com/products');
+      const data = await response.json();
+      setRows(data.products);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchProducts();
   }, []);
 
   const handleChangePage = (event, newPage) => {
